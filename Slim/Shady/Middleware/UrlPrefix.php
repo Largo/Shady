@@ -98,15 +98,6 @@ class UrlPrefix extends \Slim\Middleware
 		$oEnv->offsetSet('PATH_INFO', $this->sCleanedUri);
 		$this->app->urlprefix_params = $this->params;
 
-		\FB::log($this->sOriginalUri, __CLASS__.'::$this->sOriginalUri');
-		\FB::log($this->sCleanedUri, __CLASS__.'::$this->sCleanedUri');
-		\FB::log($this->app->urlprefix_params, 'Slim::$this->urlprefix_params');
-
-//		\FB::log($this->params,'params');
-//		\FB::log($this->paramNames,'paramNames');
-//		\FB::log($this->paramNamesPath,'paramNamesPath');
-//		\FB::log($this->conditions,'conditions');
-
 		$this->next->call();
 
 	}
@@ -138,13 +129,10 @@ class UrlPrefix extends \Slim\Middleware
 		//
 		$patternAsRegex .= '(?P<__shady_posturi__>.*)';
 
-		\FB::log($patternAsRegex,__METHOD__);
-
 		//Cache URL params' names and values if this route matches the current HTTP request
 		if (!preg_match('#^' . $patternAsRegex . '$#', $resourceUri, $paramValues)) {
 			return false;
 		}
-		\FB::log($paramValues,__METHOD__);
 
 		foreach ($this->paramNames as $name) {
 			if (isset($paramValues[$name])) {
