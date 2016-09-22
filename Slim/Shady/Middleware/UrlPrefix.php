@@ -126,12 +126,18 @@ class UrlPrefix extends \Slim\Middleware
 			$patternAsRegex .= '?';
 		}
 
-		//
 		$patternAsRegex .= '(?P<__shady_posturi__>.*)';
 
 		//Cache URL params' names and values if this route matches the current HTTP request
 		if (!preg_match('#^' . $patternAsRegex . '$#', $resourceUri, $paramValues)) {
-			return false;
+			// Parameter was not set, treat it as optional
+			// No matches set empty parameter.
+
+
+			$patternAsRegex = '(?P<__shady_posturi__>.*)';
+			preg_match('#^' . $patternAsRegex . '$#', $resourceUri, $paramValues);
+
+			// $this->params['lang'] = 'de';
 		}
 
 		foreach ($this->paramNames as $name) {
@@ -144,9 +150,14 @@ class UrlPrefix extends \Slim\Middleware
 			}
 		}
 
+	//	var_dump($this->params); exit;
+
 		if (isset($paramValues['__shady_posturi__'])) {
 			$this->sCleanedUri = $paramValues['__shady_posturi__'];
 		}
+
+		//var_dump($this->sCleanedUri); exit;
+
 
 		return true;
 	}
